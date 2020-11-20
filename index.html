@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="pl">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="user-scalable=no">
+		<link rel="shortcut icon" href="favicon.ico">
+		<title>Wisielec</title>
+		<style>
+			#check-button, #end-button, #info-box-button-left, #info-box-button-right {
+				background-color:#ffccff;
+				border-color:#ffbbff;
+				border-radius:10px;
+				border-style:solid;
+				border-width:4px;
+				color:#ffeeff;
+				text-align:center}
+			#check-button:active, #end-button:active, #info-box-button-left:active, #info-box-button-right:active {
+				color:#ffffff;
+				background-color:#ffbbff;
+				border-color:#ffaaff}
+			#check-button {
+				font-size:30px;
+				height:82px;
+				width:160px}
+			#end-button {
+				bottom:10px;
+				font-size:20px;
+				height:50px;
+				position:absolute;
+				right:10px;
+				width:120px}
+			#info-box {
+				background-color:#ffddff;
+				border-color:#ffccff;
+				border-radius:20px;
+				border-style:solid;
+				border-width:8px;
+				display:none;
+				height:384px;
+				left:50%;
+				position:absolute;
+				text-align:center;
+				top:50%;
+				transform:translate(-50%,-50%);
+				width:384px;
+				z-index:2}
+			#info-box-button-left, #info-box-button-right {
+				bottom:32px;
+				font-size:20px;
+				height:50px;
+				position:absolute;
+				width:180px}
+			#info-box-button-left {
+				left:8px}
+			#info-box-button-right {
+				right:8px}
+			#letter-space {
+				margin-top:40px}
+			#main-contener {
+				left:50%;
+				position:absolute;
+				text-align:center;
+				top:40%;
+				transform:translate(-50%,-50%)}
+			#overlay {
+  				background-color:rgba(0,0,0,0.5);
+  				bottom:0;
+				display:none;
+  				height:100%;
+  				left:0;
+				position:fixed;
+  				right:0;
+  				top:0;
+ 				width:100%;
+  				z-index:1}
+			#word-space {
+				margin-top:40px;
+				text-align:center}
+			* {
+				-moz-user-select:none;
+				-ms-user-select:none;
+				-webkit-user-select:none;
+				font-family:"comic sans ms";
+				user-select:none;
+				z-index:0}
+			.blue {
+				color:#0000ff}
+			.gray {
+				color:#808080}
+			.red {
+				color:#ff0000}
+			.green {
+				color:#00ff00}
+			body {
+				background-color:#ffddff}
+			img {
+				height:384px;
+				width:384px}
+			input {
+				background-color:#ffccff;
+				border-radius:10px;
+				border-style:none;
+				font-size:30px;
+				font-variant:small-caps;
+				font-weight:bolder;
+				height:72px;
+				text-align:center;
+				text-transform:uppercase;
+				transition-duration:0.4s;
+				width:72px}
+			input:focus, input:hover {
+				background-color:#ffbbff}
+			p {
+				text-align:center}
+			span {
+				font-size:40px;
+				font-variant:small-caps;
+				letter-spacing:5px}
+			@media screen and (max-width:1200px) {
+				}
+			@media screen and (max-width:800px) {
+				}
+		</style>
+	</head>
+	<body onload="assignButtons(); startGame(wordList);">
+		<div id="main-contener">
+			<p><img src="content/0.png" alt="Wisielec" id="picture"></p>
+			<p id="word-space"></p>
+			<p id="letter-space">
+				<label>
+					<input id="letter" type="text" maxlength="1">
+				</label>
+				<button id="check-button" type="button">Sprawdź</button>
+			</p>
+		</div>
+		<button id="end-button" type="button">ZAKOŃCZ</button>
+		<div id="overlay"></div>
+		<div id="info-box">
+			<p id="win-message"><span class="blue">W</span><span class="red">Y</span><span class="green">G</span><span class="blue">R</span><span class="red">A</span><span class="green">N</span><span class="blue">A</span><span class="red">!!!</span><br></p>
+			<p id="lose-message"><span class="gray">PRZEGRANA</span><br></p>
+			<p id="end-message"><span class="gray">GRA PRZERWANA</span><br></p>
+			Słowo:
+			<p id="game-word"></p>
+			<button id="info-box-button-left" type="button">Zagraj ponownie</button>
+			<button id="info-box-button-right" type="button">Wyjdź z gry</button>
+		</div>
+		<script type="text/javascript">
+			const wordList = ["biedronka","dinozaur","drzewa","jabłko","jaszczurka","kamień","konstantynopolitańczykowianeczka","kosmos","kościół","kot","kwiatek","las","miasto","motyl","niebo","pies","polana","ryba","samochód","sklep","słońce","trawa","ulica","wiatr","woda"];
+			var score = [];
+			score["positive"] = 0;
+			score["negative"] = 0;
+			var word;
+			var usedLetters = [];
+			var letterValue;
+			function exitGame() {
+				window.location = "http://sqdexe.github.io/";
+				}
+			function cleanUp(score) {
+				score["positive"] = 0;
+				score["negative"] = 0;
+				usedLetters.length = 0;
+				document.getElementById("picture").src = "content/0.png";
+				document.getElementById("word-space").innerHTML = "";
+				}
+			function wordSelector(wordList) {
+				word = wordList[Math.floor(Math.random() * wordList.length)].split("");
+				}
+			function setUp() {
+				let wordOutput = document.getElementById("word-space");
+				for (let i = 0; i < word.length; i++) {
+					let span = document.createElement("span");
+					wordOutput.appendChild(span);
+					span.className = word[i];
+					span.innerText = "_";
+					}
+				}
+			function showElements(styleValue) {
+				document.getElementById("overlay").style.display = styleValue;
+				document.getElementById("info-box").style.display = styleValue;
+				}
+			function startGame(wordList) {
+				showElements("none");
+				wordSelector(wordList);
+				setUp();
+				}
+			function showEndMessage(winStyle, loseStyle, breakStyle) {
+				document.getElementById("win-message").style.display = winStyle;
+				document.getElementById("lose-message").style.display = loseStyle;
+				document.getElementById("end-message").style.display = breakStyle;
+				}
+			function endGame(endType) {
+				showElements("block");
+				document.getElementById("game-word").innerText = word.join("");
+				if (endType == "win") showEndMessage("block", "none", "none");
+				else if (endType == "lose") showEndMessage("none", "block", "none");
+				else if (endType == "break") showEndMessage("none", "none", "block");
+				}
+			function check(score) {
+				letterValue = document.getElementById("letter").value.toLowerCase();
+				if (letterValue.length == 0) return score;
+				for (let i = 0; i < usedLetters.length; i++) {
+					if (letterValue == usedLetters[i]) return score;
+					}
+				usedLetters.push(letterValue);
+				document.getElementById("letter").value = "";
+				let lengthCheck = 0;
+				for (let i = 0; i < word.length; i++) {
+					if (word[i] != letterValue) lengthCheck++;
+					}
+				if (lengthCheck == word.length) {
+					score["negative"]++;
+					document.getElementById("picture").src = ("content/" + String(score["negative"]) + ".png");
+					if (score["negative"] >= 10) endGame("lose");
+					}
+				else {
+					let matchingPlaces = document.getElementsByClassName(letterValue);
+					for (let i = 0; i < matchingPlaces.length; i++) {
+						matchingPlaces[i].textContent = letterValue;
+						score["positive"]++;
+						}
+					if (score["positive"] >= word.length) endGame("win");
+					}
+				return score;
+				}
+			function assignButtons() {
+				document.getElementById("letter").addEventListener("keydown", function() {
+					if (event.keyCode === 13) score = check(score);
+					});
+				document.getElementById("check-button").addEventListener("click", function() {
+					score = check(score);
+					});
+				document.getElementById("end-button").addEventListener("click", function() {
+					endGame("break");
+					});
+				document.getElementById("info-box-button-left").addEventListener("click", function() {
+					cleanUp(score);
+					startGame(wordList);
+					});
+				document.getElementById("info-box-button-right").addEventListener("click", exitGame);
+				}
+		</script>
+	</body>
+</html>
