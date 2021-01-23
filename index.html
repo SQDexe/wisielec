@@ -30,20 +30,22 @@
 				right:10px;
 				width:120px}
 			#info-box {
+				-moz-transform:scale(0);
+				-ms-transform:scale(0);
+				-o-transform:scale(0);
+				-webkit-transform:scale(0);
 				background-color:#ffddff;
-				border-color:#ffccff;
+				border-color:#ffddff;
 				border-radius:20px;
 				border-style:solid;
-				border-width:8px;
-				display:none;
-				height:384px;
-				left:50%;
-				position:absolute;
+				height:300px;
+				margin:15% auto;
+				position:relative;
 				text-align:center;
-				top:50%;
-				transform:translate(-50%,-50%);
-				width:384px;
-				z-index:2}
+				transform:scale(0);
+				vertical-align:center;
+				width:400px;
+				z-index:-1}
 			#info-box-button-left, #info-box-button-right {
 				bottom:32px;
 				font-size:20px;
@@ -63,16 +65,15 @@
 				top:40%;
 				transform:translate(-50%,-50%)}
 			#overlay {
-  				background-color:rgba(0,0,0,0.5);
+  				background-color:rgba(0,0,0,0);
   				bottom:0;
-				display:none;
   				height:100%;
   				left:0;
 				position:fixed;
   				right:0;
   				top:0;
  				width:100%;
-  				z-index:1}
+  				z-index:-1}
 			#word-space {
 				margin-top:40px;
 				text-align:center}
@@ -147,23 +148,18 @@
 		<script type="text/javascript">
 			const wordList = ["biedronka","dinozaur","drzewa","jabłko","jaszczurka","kamień","konstantynopolitańczykowianeczka","kosmos","kościół","kot","kwiatek","las","miasto","motyl","niebo","pies","polana","ryba","samochód","sklep","słońce","trawa","ulica","wiatr","woda"];
 			var score = [];
-			score["positive"] = 0;
-			score["negative"] = 0;
+			score["positive"] = 0, score["negative"] = 0;
 			var word;
 			var usedLetters = [];
 			var letterValue;
 			function exitGame() {
 				window.location = "http://sqdexe.github.io/";
 				}
-			function cleanUp(score) {
-				score["positive"] = 0;
-				score["negative"] = 0;
+			function cleanUp() {
+				score["positive"] = 0, score["negative"] = 0;
 				usedLetters.length = 0;
 				document.getElementById("picture").src = "content/0.png";
 				document.getElementById("word-space").innerHTML = "";
-				}
-			function wordSelector(wordList) {
-				word = wordList[Math.floor(Math.random() * wordList.length)].split("");
 				}
 			function setUp() {
 				let wordOutput = document.getElementById("word-space");
@@ -175,12 +171,39 @@
 					}
 				}
 			function showElements(styleValue) {
-				document.getElementById("overlay").style.display = styleValue;
-				document.getElementById("info-box").style.display = styleValue;
+				var infoBox = document.getElementById("info-box");
+				let overlay = document.getElementById("overlay");
+				if (styleValue == "out") {
+					let scaleValue = 1, colorValue = 0.5;
+					let fadeoutInterval = setInterval(function() {
+						scaleValue = scaleValue - 0.1;
+						colorValue = colorValue - 0.05;
+						infoBox.style.transform = "scale(" + scaleValue + ")";
+						overlay.style.backgroundColor = "rgba(0,0,0," + colorValue + ")"; 
+						}, 20);
+					setTimeout(function() {
+						clearInterval(fadeoutInterval);
+						infoBox.style.transform = "scale(0)";
+						overlay.style.backgroundColor = "rgba(0,0,0,0)"
+						overlay.style.zIndex = -1;
+						infoBox.style.zIndex = -1;
+						}, 220);
+					}
+				else {
+					overlay.style.zIndex = 1;
+					infoBox.style.zIndex = 2;
+					let scaleValue = 0, colorValue = 0;
+					let fadeinInterval = setInterval(function() {
+						scaleValue = scaleValue + 0.1;
+						colorValue = colorValue + 0.05;
+						infoBox.style.transform = "scale(" + scaleValue + ")";
+						overlay.style.backgroundColor = "rgba(0,0,0," + colorValue + ")"; 
+						}, 20);
+					setTimeout(clearInterval, 220, fadeinInterval);
+					}
 				}
-			function startGame(wordList) {
-				showElements("none");
-				wordSelector(wordList);
+			function startGame() {
+				word = wordList[Math.floor(Math.random() * wordList.length)].split("");
 				setUp();
 				}
 			function showEndMessage(winStyle, loseStyle, breakStyle) {
@@ -189,17 +212,17 @@
 				document.getElementById("end-message").style.display = breakStyle;
 				}
 			function endGame(endType) {
-				showElements("block");
+				showElements("in");
 				document.getElementById("game-word").innerText = word.join("");
 				if (endType == "win") showEndMessage("block", "none", "none");
 				else if (endType == "lose") showEndMessage("none", "block", "none");
-				else if (endType == "break") showEndMessage("none", "none", "block");
+				else showEndMessage("none", "none", "block");
 				}
-			function check(score) {
+			function check() {
 				letterValue = document.getElementById("letter").value.toLowerCase();
-				if (letterValue.length == 0) return score;
+				if (letterValue.length == 0) return;
 				for (let i = 0; i < usedLetters.length; i++) {
-					if (letterValue == usedLetters[i]) return score;
+					if (letterValue == usedLetters[i]) return;
 					}
 				usedLetters.push(letterValue);
 				document.getElementById("letter").value = "";
@@ -220,21 +243,15 @@
 						}
 					if (score["positive"] >= word.length) endGame("win");
 					}
-				return score;
 				}
 			function assignButtons() {
-				document.getElementById("letter").addEventListener("keydown", function() {
-					if (event.keyCode === 13) score = check(score);
-					});
-				document.getElementById("check-button").addEventListener("click", function() {
-					score = check(score);
-					});
-				document.getElementById("end-button").addEventListener("click", function() {
-					endGame("break");
-					});
+				document.getElementById("letter").addEventListener("keydown", function() {if (event.keyCode === 13) check();});
+				document.getElementById("check-button").addEventListener("click", check);
+				document.getElementById("end-button").addEventListener("click", function() {endGame("break");});
 				document.getElementById("info-box-button-left").addEventListener("click", function() {
-					cleanUp(score);
-					startGame(wordList);
+					cleanUp();
+					startGame();
+					showElements("out");
 					});
 				document.getElementById("info-box-button-right").addEventListener("click", exitGame);
 				}
