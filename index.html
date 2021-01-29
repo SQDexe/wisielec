@@ -194,8 +194,8 @@
 				else {
 					let scaleValue = fadeValues.maxScale, colorValue = fadeValues.maxColor;
 					for (let i = 0; i < fadeValues.iterationNumber; i++) setTimeout(function() {
-						scaleValue = scaleValue - (fadeValue.maxScale/fadeValues.iterationNumber);
-						colorValue = colorValue - (fadeValue.maxColor/fadeValues.iterationNumber);
+						scaleValue = scaleValue - (fadeValues.maxScale/fadeValues.iterationNumber);
+						colorValue = colorValue - (fadeValues.maxColor/fadeValues.iterationNumber);
 						infoBox.style.transform = "scale(" + scaleValue + ")";
 						overlay.style.backgroundColor = "rgba(0,0,0," + colorValue + ")"; 
 						}, fadeValues.waitingTime);
