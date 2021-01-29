@@ -181,7 +181,7 @@
 				let infoBox = document.getElementById("info-box");
 				let overlay = document.getElementById("overlay");
 				if (styleValue == "in") {
-					let scaleValue = fadeValue.min, colorValue = fadeValue.min;
+					let scaleValue = fadeValues.min, colorValue = fadeValues.min;
 					overlay.style.zIndex = 1;
 					infoBox.style.zIndex = 2;
 					for (let i = 0; i < fadeValues.iterationNumber; i++) setTimeout(function() {
@@ -192,7 +192,7 @@
 						}, fadeValues.waitingTime);
 					}
 				else {
-					let scaleValue = fadeValue.maxScale, colorValue = fadeValue.maxColor;
+					let scaleValue = fadeValues.maxScale, colorValue = fadeValues.maxColor;
 					for (let i = 0; i < fadeValues.iterationNumber; i++) setTimeout(function() {
 						scaleValue = scaleValue - (fadeValue.maxScale/fadeValues.iterationNumber);
 						colorValue = colorValue - (fadeValue.maxColor/fadeValues.iterationNumber);
