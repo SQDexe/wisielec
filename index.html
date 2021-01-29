@@ -173,7 +173,9 @@
 			function showElements(styleValue) {
 				var infoBox = document.getElementById("info-box");
 				let overlay = document.getElementById("overlay");
-				if (styleValue == "out") {
+				if (styleValue == "in") for (let i = 0; i < 10; i++) setTimeout(fadeIn, 20, infoBox, overlay);
+				else for (let i = 0; i < 10; i++) setTimeout(fadeOut, 20, infoBox, overlay);
+				/*if (styleValue == "out") {
 					let scaleValue = 1, colorValue = 0.5;
 					let fadeoutInterval = setInterval(function() {
 						scaleValue = scaleValue - 0.1;
@@ -200,7 +202,7 @@
 						overlay.style.backgroundColor = "rgba(0,0,0," + colorValue + ")"; 
 						}, 20);
 					setTimeout(clearInterval, 220, fadeinInterval);
-					}
+					}*/
 				}
 			function startGame() {
 				word = wordList[Math.floor(Math.random() * wordList.length)].split("");
