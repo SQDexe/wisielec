@@ -177,9 +177,9 @@
 					let scaleValue = 0, colorValue = 0;
 					overlay.style.zIndex = 1;
 					infoBox.style.zIndex = 2;	
-					for (let i = 0; i < 10; i++) setTimeout(function() {
-						scaleValue = scaleValue + 0.1;
-						colorValue = colorValue + 0.05;
+					for (let i = 0; i < 25; i++) setTimeout(function() {
+						scaleValue = scaleValue + 0.04;
+						colorValue = colorValue + 0.02;
 						infoBox.style.transform = "scale(" + scaleValue + ")";
 						overlay.style.backgroundColor = "rgba(0,0,0," + colorValue + ")"; 
 						}, 20);
@@ -187,8 +187,8 @@
 				else {
 					let scaleValue = 1, colorValue = 0.5;
 					for (let i = 0; i < 10; i++) setTimeout(function() {
-						scaleValue = scaleValue - 0.1;
-						colorValue = colorValue - 0.05;
+						scaleValue = scaleValue - 0.04;
+						colorValue = colorValue - 0.02;
 						infoBox.style.transform = "scale(" + scaleValue + ")";
 						overlay.style.backgroundColor = "rgba(0,0,0," + colorValue + ")"; 
 						}, 20);
