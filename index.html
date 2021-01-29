@@ -146,12 +146,19 @@
 			<button id="info-box-button-right" type="button">Wyjdź z gry</button>
 		</div>
 		<script type="text/javascript">
+			/* Opcje */
 			const wordList = ["biedronka","dinozaur","drzewa","jabłko","jaszczurka","kamień","konstantynopolitańczykowianeczka","kosmos","kościół","kot","kwiatek","las","miasto","motyl","niebo","pies","polana","ryba","samochód","sklep","słońce","trawa","ulica","wiatr","woda"];
-			var score = [];
+			const fadeValues = {
+				iterationNumber: 25,
+				maxColor: 0.5,
+				min: 0,
+				maxScale: 1,
+				waitingTime: 30;
+				}
+			/* --- */
+			var letterValue, word;
+			var score = [], usedLetters = [];
 			score["positive"] = 0, score["negative"] = 0;
-			var word;
-			var usedLetters = [];
-			var letterValue;
 			function exitGame() {
 				window.location = "http://sqdexe.github.io/";
 				}
@@ -171,27 +178,27 @@
 					}
 				}
 			function showElements(styleValue) {
-				var infoBox = document.getElementById("info-box");
+				let infoBox = document.getElementById("info-box");
 				let overlay = document.getElementById("overlay");
 				if (styleValue == "in") {
-					let scaleValue = 0, colorValue = 0;
+					let scaleValue = fadeValue.min, colorValue = fadeValue.min;
 					overlay.style.zIndex = 1;
-					infoBox.style.zIndex = 2;	
-					for (let i = 0; i < 25; i++) setTimeout(function() {
-						scaleValue = scaleValue + 0.04;
-						colorValue = colorValue + 0.02;
+					infoBox.style.zIndex = 2;
+					for (let i = 0; i < fadeValues.iterationNumber; i++) setTimeout(function() {
+						scaleValue = scaleValue + (fadeValues.maxScale/fadeValues.iterationNumber);
+						colorValue = colorValue + (fadeValues.maxColor/fadeValues.iterationNumber);
 						infoBox.style.transform = "scale(" + scaleValue + ")";
 						overlay.style.backgroundColor = "rgba(0,0,0," + colorValue + ")"; 
-						}, 20);
+						}, fadeValues.waitingTime);
 					}
 				else {
-					let scaleValue = 1, colorValue = 0.5;
-					for (let i = 0; i < 25; i++) setTimeout(function() {
-						scaleValue = scaleValue - 0.04;
-						colorValue = colorValue - 0.02;
+					let scaleValue = fadeValue.maxScale, colorValue = fadeValue.maxColor;
+					for (let i = 0; i < fadeValues.iterationNumber; i++) setTimeout(function() {
+						scaleValue = scaleValue - (fadeValue.maxScale/fadeValues.iterationNumber);
+						colorValue = colorValue - (fadeValue.maxColor/fadeValues.iterationNumber);
 						infoBox.style.transform = "scale(" + scaleValue + ")";
 						overlay.style.backgroundColor = "rgba(0,0,0," + colorValue + ")"; 
-						}, 20);
+						}, fadeValues.waitingTime);
 					overlay.style.zIndex = -1;
 					infoBox.style.zIndex = -1;
 					}
