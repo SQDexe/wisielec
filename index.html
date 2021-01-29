@@ -173,36 +173,28 @@
 			function showElements(styleValue) {
 				var infoBox = document.getElementById("info-box");
 				let overlay = document.getElementById("overlay");
-				if (styleValue == "in") for (let i = 0; i < 10; i++) setTimeout(fadeIn, 20, infoBox, overlay);
-				else for (let i = 0; i < 10; i++) setTimeout(fadeOut, 20, infoBox, overlay);
-				/*if (styleValue == "out") {
-					let scaleValue = 1, colorValue = 0.5;
-					let fadeoutInterval = setInterval(function() {
-						scaleValue = scaleValue - 0.1;
-						colorValue = colorValue - 0.05;
-						infoBox.style.transform = "scale(" + scaleValue + ")";
-						overlay.style.backgroundColor = "rgba(0,0,0," + colorValue + ")"; 
-						}, 20);
-					setTimeout(function() {
-						clearInterval(fadeoutInterval);
-						infoBox.style.transform = "scale(0)";
-						overlay.style.backgroundColor = "rgba(0,0,0,0)"
-						overlay.style.zIndex = -1;
-						infoBox.style.zIndex = -1;
-						}, 220);
-					}
-				else {
-					overlay.style.zIndex = 1;
-					infoBox.style.zIndex = 2;
+				if (styleValue == "in") {
 					let scaleValue = 0, colorValue = 0;
-					let fadeinInterval = setInterval(function() {
+					overlay.style.zIndex = 1;
+					infoBox.style.zIndex = 2;	
+					for (let i = 0; i < 10; i++) setTimeout(function() {
 						scaleValue = scaleValue + 0.1;
 						colorValue = colorValue + 0.05;
 						infoBox.style.transform = "scale(" + scaleValue + ")";
 						overlay.style.backgroundColor = "rgba(0,0,0," + colorValue + ")"; 
 						}, 20);
-					setTimeout(clearInterval, 220, fadeinInterval);
-					}*/
+					}
+				else {
+					let scaleValue = 1, colorValue = 0.5;
+					for (let i = 0; i < 10; i++) setTimeout(function() {
+						scaleValue = scaleValue - 0.1;
+						colorValue = colorValue - 0.05;
+						infoBox.style.transform = "scale(" + scaleValue + ")";
+						overlay.style.backgroundColor = "rgba(0,0,0," + colorValue + ")"; 
+						}, 20);
+					overlay.style.zIndex = -1;
+					infoBox.style.zIndex = -1;
+					}
 				}
 			function startGame() {
 				word = wordList[Math.floor(Math.random() * wordList.length)].split("");
