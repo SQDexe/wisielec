@@ -149,11 +149,11 @@
 			/* Opcje */
 			const wordList = ["biedronka","dinozaur","drzewa","jabłko","jaszczurka","kamień","konstantynopolitańczykowianeczka","kosmos","kościół","kot","kwiatek","las","miasto","motyl","niebo","pies","polana","ryba","samochód","sklep","słońce","trawa","ulica","wiatr","woda"];
 			const fadeValues = {
-				iterationNumber: 25,
+				iterationNumber: 15,
 				maxColor: 0.5,
 				min: 0,
 				maxScale: 1,
-				waitingTime: 100,
+				waitingTime: 10,
 				}
 			/* --- */
 			var letterValue, word;
@@ -182,14 +182,16 @@
 				let overlay = document.getElementById("overlay");
 				if (styleValue == "in") {
 					let scaleValue = fadeValues.min, colorValue = fadeValues.min;
-					overlay.style.zIndex = 1;
-					infoBox.style.zIndex = 2;
 					for (let i = 0; i < fadeValues.iterationNumber; i++) setTimeout(function() {
+						if (i == 0) {
+							overlay.style.zIndex = 1;
+							infoBox.style.zIndex = 2;
+							}
 						scaleValue = scaleValue + (fadeValues.maxScale/fadeValues.iterationNumber);
 						colorValue = colorValue + (fadeValues.maxColor/fadeValues.iterationNumber);
 						infoBox.style.transform = "scale(" + scaleValue + ")";
 						overlay.style.backgroundColor = "rgba(0,0,0," + colorValue + ")"; 
-						}, fadeValues.waitingTime);
+						}, fadeValues.waitingTime * (1 + i));
 					}
 				else {
 					let scaleValue = fadeValues.maxScale, colorValue = fadeValues.maxColor;
@@ -198,9 +200,11 @@
 						colorValue = colorValue - (fadeValues.maxColor/fadeValues.iterationNumber);
 						infoBox.style.transform = "scale(" + scaleValue + ")";
 						overlay.style.backgroundColor = "rgba(0,0,0," + colorValue + ")"; 
-						}, fadeValues.waitingTime);
-					overlay.style.zIndex = -1;
-					infoBox.style.zIndex = -1;
+						if (i == fadeValues.iterationNumber - 1) {
+							overlay.style.zIndex = -1;
+							infoBox.style.zIndex = -1;
+							}
+						}, fadeValues.waitingTime * (1 + i));
 					}
 				}
 			function startGame() {
@@ -248,7 +252,7 @@
 			function assignButtons() {
 				document.getElementById("letter").addEventListener("keydown", function() {if (event.keyCode === 13) check();});
 				document.getElementById("check-button").addEventListener("click", check);
-				document.getElementById("end-button").addEventListener("click", function() {endGame("break");});
+				document.getElementById("end-button").addEventListener("click", endGame, "break");
 				document.getElementById("info-box-button-left").addEventListener("click", function() {
 					cleanUp();
 					startGame();
