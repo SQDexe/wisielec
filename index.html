@@ -3,6 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="user-scalable=no">
+		<meta name="keywords" content="SDQ.exe, Wisielec">
 		<link rel="shortcut icon" href="favicon.ico">
 		<title>Wisielec</title>
 		<style>
@@ -38,6 +39,7 @@
 				border-color:#ffddff;
 				border-radius:20px;
 				border-style:solid;
+				display:none;
 				height:300px;
 				margin:15% auto;
 				position:relative;
@@ -45,7 +47,7 @@
 				transform:scale(0);
 				vertical-align:center;
 				width:400px;
-				z-index:-1}
+				z-index:2}
 			#info-box-button-left, #info-box-button-right {
 				bottom:32px;
 				font-size:20px;
@@ -67,13 +69,14 @@
 			#overlay {
   				background-color:rgba(0,0,0,0);
   				bottom:0;
+				display:none;
   				height:100%;
   				left:0;
 				position:fixed;
   				right:0;
   				top:0;
  				width:100%;
-  				z-index:-1}
+  				z-index:1}
 			#word-space {
 				margin-top:40px;
 				text-align:center}
@@ -184,8 +187,8 @@
 					let scaleValue = fadeValues.min, colorValue = fadeValues.min;
 					for (let i = 0; i < fadeValues.iterationNumber; i++) setTimeout(function() {
 						if (i == 0) {
-							overlay.style.zIndex = 1;
-							infoBox.style.zIndex = 2;
+							overlay.style.display = "block";
+							infoBox.style.display = "block";
 							}
 						scaleValue = scaleValue + (fadeValues.maxScale/fadeValues.iterationNumber);
 						colorValue = colorValue + (fadeValues.maxColor/fadeValues.iterationNumber);
@@ -201,8 +204,8 @@
 						infoBox.style.transform = "scale(" + scaleValue + ")";
 						overlay.style.backgroundColor = "rgba(0,0,0," + colorValue + ")"; 
 						if (i == fadeValues.iterationNumber - 1) {
-							overlay.style.zIndex = -1;
-							infoBox.style.zIndex = -1;
+							overlay.style.display = "none";
+							infoBox.style.dispaly = "none";
 							}
 						}, fadeValues.waitingTime * (1 + i));
 					}
